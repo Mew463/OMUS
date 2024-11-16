@@ -1,0 +1,5 @@
+#define MAG_SENSE 10
+
+#define LEFT_MOTOR GPIO_NUM_3
+#define RIGHT_MOTOR GPIO_NUM_2
+#define WEAPON_MOTOR GPIO_NUM_1
