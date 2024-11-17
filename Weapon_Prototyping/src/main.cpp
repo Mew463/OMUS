@@ -11,7 +11,6 @@ const int packSize = 5;
 char laptop_packetBuffer[packSize] = {};
 BLE_Uart computer = BLE_Uart(laptop_packetBuffer, packSize);
 
-
 DShotESC l_mot;
 DShotESC r_mot;
 // DShotESC weap_mot;
@@ -56,6 +55,8 @@ void setup() {
   
   computer.init_ble("OMUS");
 	
+  pinMode(8, OUTPUT);
+  analogWrite(8, 125);
   pinMode(MAG_SENSE, INPUT_PULLUP);
 }
 
