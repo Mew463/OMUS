@@ -1,5 +1,10 @@
-#define MAG_SENSE 10
+#define MAG_SENSE 34
 
-#define LEFT_MOTOR GPIO_NUM_3
-#define RIGHT_MOTOR GPIO_NUM_2
-#define WEAPON_MOTOR GPIO_NUM_1
+#define LEFT_MOTOR GPIO_NUM_41
+#define RIGHT_MOTOR GPIO_NUM_42
+#define WEAPON_MOTOR GPIO_NUM_40
+
+#define SCL_TOF 17
+#define SDA_TOF 18
+
+#define BAT_PIN 7

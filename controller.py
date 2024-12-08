@@ -10,7 +10,7 @@ startTime = time.time()
 def millis():
     return round((time.time()-startTime) * 1000)
 
-omus = BLE_UART(peripheral_name='OMUS', address = 'A9019EE1-0F5E-291D-6EC1-9250F4110653')
+omus = BLE_UART(peripheral_name='OMUS', address = '5B5FE843-FA33-2075-4100-949B5FF1ED5F')
 
 keyboard_thread = threading.Thread(target=lambda: Listener(on_press=on_press, on_release=on_release).start())
 keyboard_thread.daemon = True
@@ -18,6 +18,7 @@ keyboard_thread.start()
 
 robotcmd = ""
 enabled = 0
+drivestate = 1
 
 async def bluetooth_receive_handler(BLE_DEVICE):
     global lastBeaconRead
@@ -42,8 +43,8 @@ async def cmd_handler():
     global irbeaconcmd
     global enabled
     global activeBeacon
+    global drivestate
     waitForEnableReleased = 0
-    drivestate = 1
     while True:
         x,y,drivecmd,robottuning,flip,boost = (0,)*6  
         
@@ -90,21 +91,28 @@ async def cmd_handler():
             
         if get_key_state("Key.space"):     
             if get_key_state("Key.ctrl"):
-                enabled = drivestate
+                enabled = 1
+                drivestate = 1 # Set default drive state
                 waitForEnableReleased = 1
             else:
                 if not waitForEnableReleased:
                     enabled = 0
         if not (get_key_state("Key.space")) and not (get_key_state("Key.ctrl")):
             waitForEnableReleased = 0
-        
+        if (enabled == 1):
+            if (get_key_state('z')):
+                drivestate = 1
+            if (get_key_state('c')):
+                drivestate = 2
+        else:
+            drivestate = 0
         if (get_key_state('x') or get_key_state('X')):
             flip = 1
         
         if (get_key_state("Key.shift")):
             boost = 1 
 
-        robotcmd = f"{enabled}{drivecmd}{robottuning}{boost}{flip}"
+        robotcmd = f"{drivestate}{drivecmd}{robottuning}{boost}{flip}"
         # print(robotcmd)
         await asyncio.sleep(0.01)
         
